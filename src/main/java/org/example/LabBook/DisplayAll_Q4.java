@@ -1,7 +1,7 @@
 package org.example.LabBook;
 
 //Q1- Write a java program to print person details in the format as shown below:
-public class DisplayAll_Q5 {
+public class DisplayAll_Q4 {
     public static void main(String[] args) {
         System.out.println("FirstName: Divya");
         System.out.println("LastName: Bharthi");
