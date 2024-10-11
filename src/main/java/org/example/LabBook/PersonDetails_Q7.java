@@ -2,7 +2,7 @@ package org.example.LabBook;
 
 import java.util.Scanner;
 
-public class PersonDetails {
+public class PersonDetails_Q7 {
     public static String Person_details(String firstName, String lastName, int age, String gender, String phone) {
         return "Name: " + firstName + " " + lastName + "\nAge: " + age + "\nGender: " + gender + "\nPhone: " + phone;
     }
@@ -27,7 +27,7 @@ public class PersonDetails {
 
         System.out.print("please enter your phone number: ");
         String phone = sc.nextLine();
-        PersonDetails obj1 = new PersonDetails();
+        PersonDetails_Q7 obj1 = new PersonDetails_Q7();
 
         String personInfo = obj1.Person_details(firstName, lastName, age, gender, phone);
         obj1.display(personInfo);

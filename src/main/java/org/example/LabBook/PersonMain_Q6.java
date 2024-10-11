@@ -5,7 +5,7 @@ import java.util.Scanner;
  argument and check  whether the given number is positive or negative number.
 */
 
-public class Question2 {
+public class PersonMain_Q6 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int num = sc.nextInt();
