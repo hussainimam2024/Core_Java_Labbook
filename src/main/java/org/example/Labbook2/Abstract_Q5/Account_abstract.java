@@ -56,12 +56,7 @@ abstract class Account_abstract {
 
         @Override
         public String toString() {
-            return "Account_Person{" +
-                    "name='" + name + '\'' +
-                    ", age=" + age +
-                    ", accNumber=" + accNumber +
-                    ", balance=" + balance +
-                    '}';
+            return "Account_Person{" +"name='" + name + '\'' + ", age=" + age + ", accNumber=" + accNumber + ", balance=" + balance + '}';
         }
     }
     static class Account_Person2 extends Account_Person1 {

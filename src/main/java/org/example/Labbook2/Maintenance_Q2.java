@@ -116,7 +116,7 @@ public class Maintenance_Q2 {
         current.deposit(2000);
 
         if (current.canWithdraw(5500)) {
-            current.withdraw(5500); // Test overdraft
+            current.withdraw(5500);
         } else {
             System.out.println("Cannot withdraw 7000 INR due to overdraft limit.");
         }

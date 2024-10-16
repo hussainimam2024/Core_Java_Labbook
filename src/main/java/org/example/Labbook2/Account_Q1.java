@@ -69,12 +69,7 @@ public class Account_Q1 {
 
         @Override
         public String toString() {
-            return "Account_Person{" +
-                    "name='" + name + '\'' +
-                    ", age=" + age +
-                    ", accNumber=" + accNumber +
-                    ", balance=" + balance +
-                    '}';
+            return "Account_Person{" +"name='" + name + '\'' + ", age=" + age +", accNumber=" + accNumber + ", balance=" + balance + '}';
         }
     }
 
