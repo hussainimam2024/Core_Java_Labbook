@@ -47,6 +47,7 @@ public class Maintenance_Q2 {
             setBalance(getBalance() + amount);
             System.out.println(amount + " INR deposited to " + name + "'s account.");
         }
+
         public void withdraw(long amount) {
             if (getBalance() - amount >= 500) {
                 setBalance(getBalance() - amount);
@@ -55,6 +56,7 @@ public class Maintenance_Q2 {
                 System.out.println("Insufficient balance for withdrawal.");
             }
         }
+
         @Override
         public String toString() {
             return "Account_Person{" +
@@ -65,13 +67,12 @@ public class Maintenance_Q2 {
                     '}';
         }
     }
+
     static class SavingsAccount extends Account_Person {
         private final long minimumBalance = 1000;
-
         public SavingsAccount(String name, float age, long balance) {
             super(name, age, balance);
         }
-        @Override
         public void withdraw(long amount) {
             if (getBalance() - amount >= minimumBalance) {
                 setBalance(getBalance() - amount);
@@ -81,8 +82,9 @@ public class Maintenance_Q2 {
             }
         }
     }
+
     static class CurrentAccount extends Account_Person {
-        private long overdraftLimit = 5000;
+        private long overdraftLimit = 1000;
 
         public CurrentAccount(String name, float age, long balance) {
             super(name, age, balance);
@@ -97,6 +99,10 @@ public class Maintenance_Q2 {
                 System.out.println("Overdraft limit of " + overdraftLimit + " INR reached. Cannot withdraw.");
             }
         }
+
+        public boolean canWithdraw(long amount) {
+            return getBalance() - amount >= -overdraftLimit;
+        }
     }
 
     public static void main(String[] args) {
@@ -108,7 +114,13 @@ public class Maintenance_Q2 {
 
         CurrentAccount current = new CurrentAccount("Kathy", 23, 3000);
         current.deposit(2000);
-        current.withdraw(7000); // Test overdraft
+
+        if (current.canWithdraw(5500)) {
+            current.withdraw(5500); // Test overdraft
+        } else {
+            System.out.println("Cannot withdraw 7000 INR due to overdraft limit.");
+        }
+
         System.out.println("Current Account Balance: " + current.getBalance() + " INR");
     }
 }

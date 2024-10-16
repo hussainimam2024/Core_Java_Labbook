@@ -1,15 +1,19 @@
-package org.example.Labbook2;
+package org.example.Labbook2.Abstract_Q5;
 
-public class Account_Q1 {
-    static class Account_Person {
+import org.example.Labbook2.Account_Q1;
+
+abstract class Account_abstract {
+    static abstract class Account_Person1 {
         private String name;
         private float age;
         private int accNumber;
         private long balance;
         private String accHolder;
-        private static int accCounter = 1000;
+        private static int accCounter = 9876;
 
-        public Account_Person(String name, float age, long balance) {
+        abstract void withdraws(float amount);
+
+        public Account_Person1(String name, float age, long balance) {
             this.name = name;
             this.age = age;
             this.accNumber = accCounter++;
@@ -19,11 +23,9 @@ public class Account_Q1 {
         public String getName() {
             return name;
         }
-
         public void setName(String name) {
             this.name = name;
         }
-
         public float getAge() {
             return age;
         }
@@ -51,21 +53,6 @@ public class Account_Q1 {
         public void setAccHolder(String accHolder) {
             this.accHolder = accHolder;
         }
-        public void deposit(long amount) {
-            long currentBalance = getBalance();
-            setBalance(currentBalance + amount);
-            System.out.println(amount + " INR deposited to " + name + "'s account.");
-        }
-
-        public void withdraw(long amount) {
-            long currentBalance = getBalance();
-            if (currentBalance - amount >= 500) {
-                setBalance(currentBalance - amount);
-                System.out.println(amount + " INR withdrawn from " + name + "'s account.");
-            } else {
-                System.out.println("Insufficient balance for withdrawal.");
-            }
-        }
 
         @Override
         public String toString() {
@@ -77,18 +64,33 @@ public class Account_Q1 {
                     '}';
         }
     }
+    static class Account_Person2 extends Account_Person1 {
+
+        public Account_Person2(String name, float age, long balance) {
+            super(name, age, balance);
+        }
+
+        @Override
+        public void withdraws(float amount) {
+            long currentBalance = getBalance();
+            if (currentBalance - amount >= 500) {
+                setBalance(currentBalance - (long) amount);
+                System.out.println(amount + " INR withdrawn from " + getName() + "'s account.");
+            } else {
+                System.out.println("Insufficient balance for withdrawal.");
+            }
+        }
+    }
 
     public static void main(String[] args) {
-        Account_Person smith = new Account_Person("Smith", 20, 2000);
-        Account_Person kathy = new Account_Person("Kathy", 23, 3000);
-
-        smith.deposit(2000);
-        kathy.withdraw(2000);
-
+        Account_Person1 smith = new Account_Person2("Smith", 20, 2000);
+        Account_Person1 kathy = new Account_Person2("Kathy", 23, 3000);
+        kathy.withdraws(2000);
         System.out.println("Updated Account Details:");
         System.out.println(smith);
         System.out.println(kathy);
         System.out.println("Smith's balance: " + smith.getBalance() + " INR");
         System.out.println("Kathy's balance: " + kathy.getBalance() + " INR");
     }
+
 }
