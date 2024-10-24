@@ -36,7 +36,7 @@ public class Employee {
 
     public void setSalary(double salary) throws EmployeeException {
         if (salary < 3000) {
-            throw new EmployeeException("Salary must be greater than 3000.");
+            throw new EmployeeException("Salary must be greater than 3000");
         }
         this.salary = salary;
         this.insuranceScheme = determineInsuranceScheme(); // Recalculate the insurance scheme
