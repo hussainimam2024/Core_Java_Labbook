@@ -70,6 +70,4 @@ public class Lab3Test {
     }
   }
 
-  public static class Lab5_JavaSelenium {
-  }
 }

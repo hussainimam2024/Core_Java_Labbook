@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [All Test Suite]" guice-stage="DEVELOPMENT">
+  <test thread-count="5" name="C:/Users/imam.hussain/IdeaProjects/newporjects/Ascendion/src/test(failed)">
+    <classes>
+      <class name="TestNG_Pac.TestNG1_EX">
+        <methods>
+          <include name="afterClass"/>
+          <include name="afterSuite"/>
+          <include name="f"/>
+          <include name="beforeClass"/>
+          <include name="beforeMethod"/>
+          <include name="afterMethod"/>
+          <include name="beforeTest"/>
+          <include name="afterTest"/>
+          <include name="beforeSuite"/>
+        </methods>
+      </class> <!-- TestNG_Pac.TestNG1_EX -->
+    </classes>
+  </test> <!-- C:/Users/imam.hussain/IdeaProjects/newporjects/Ascendion/src/test(failed) -->
+</suite> <!-- Failed suite [All Test Suite] -->

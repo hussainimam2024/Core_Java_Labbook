@@ -13,9 +13,6 @@ public class Sendkeys_Ex {
 
         driver.manage().window().maximize();
 
-        driver.findElement(By.id("input-firstname")).sendKeys("Imam");
-        driver.findElement(By.id("input-firstname")).sendKeys(Keys.TAB);
-        driver.findElement(By.id("input-lastname")).sendKeys(Keys.NUMPAD7);
 
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scroll(320,document.body.scrollHeight)");

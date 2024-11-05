@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Logins>
+    <Login id="1">
+        <url>https://demo.opencart.com/en-gb?route=account/login</url>
+        <username>hussainengineer2024@gmail.com</username>
+        <password>Opencart@2024</password>
+    </Login>
+    <Login id="2">
+        <url>https://demo.opencart.com/en-gb?route=account/login</url>
+        <username>hussainengineer2026@gmail.com</username>
+        <password>Opencart@2025</password>
+    </Login>
+</Logins>

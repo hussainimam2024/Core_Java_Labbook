@@ -30,24 +30,25 @@ public class Lab6_Selenium {
         js.executeScript("arguments[0].click();", loginButton);
 
 
-//        // Go to Components tab and click
-//        WebElement componentsTab = driver.findElement(By.xpath("//a[text()='Components']"));
-//        componentsTab.click();
+        // Go to Components tab and click
+        WebElement componentsTab = driver.findElement(By.xpath("//a[text()='Components']"));
+        componentsTab.click();
 
 
         // Step 3: Select 'Monitors' from the dropdown
         WebElement monitorsLink = driver.findElement(By.xpath("//a[text()='Monitors (2)']"));
         js.executeScript("arguments[0].click();", monitorsLink);
 
-        WebElement limitDropdown = driver.findElement(By.id("input-limit"));
-        js.executeScript("arguments[0].value='https://demo.opencart.com/en-gb/catalog/component/monitor?limit=25';", limitDropdown);
-        js.executeScript("arguments[0].dispatchEvent(new Event('change'));", limitDropdown);
+        WebElement element1 = driver.findElement(By.xpath("(//select[@id='input-limit'])[2]"));
+        element1.click();
+        Thread.sleep(7000);
 
 
         //click on add to cart
-        JavascriptExecutor js3 = (JavascriptExecutor) driver;
-        WebElement cartButton = driver.findElement(By.xpath("//div[@id='product-list']/div[1]//button[@type='submit' and @aria-label='Add to Cart']"));
-        js3.executeScript("arguments[0].click();", cartButton);
+        WebElement cartButton = driver.findElement(By.xpath("//button[@aria-label='Add to Cart']//i[@class='fa-solid fa-shopping-cart']"));
+        JavascriptExecutor js2 = (JavascriptExecutor) driver;
+        js2.executeScript("arguments[0].click();", cartButton);
+
 
 
     }
