@@ -1,4 +1,4 @@
-package org.example.WebDriver_Selenium.Examples.Test_Pack1;
+package org.example.Datadriven_Framework.pageobjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -14,15 +14,15 @@ public class LOGIN_POM {
         this.driver=driver;
     }
 
-    void enterusername(String name) {
+    public void enterusername(String name) {
         driver.findElement(username).sendKeys(name);
     }
 
-    void enterpassword(String pass) {
+    public void enterpassword(String pass) {
         driver.findElement(password).sendKeys(pass);
     }
 
-    void Loginbtn() {
+    public void Loginbtn() {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", driver.findElement(loginbutton)); // corrected line
     }

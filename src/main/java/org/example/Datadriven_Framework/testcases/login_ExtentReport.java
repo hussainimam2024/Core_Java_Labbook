@@ -1,4 +1,4 @@
-package org.example.WebDriver_Selenium.Examples.Test_Pack1;
+package org.example.Datadriven_Framework.testcases;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -8,6 +8,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.example.Datadriven_Framework.pageobjects.LOGIN_POM;
 import org.openqa.selenium.*;
 import org.openqa.selenium.edge.EdgeDriver;
 
@@ -22,15 +23,18 @@ public class login_ExtentReport {
         extent.attachReporter(spark);
         ExtentTest test = extent.createTest("login successfull");
 
-        FileInputStream file = new FileInputStream("C:\\Users\\imam.hussain\\IdeaProjects\\newporjects\\Ascendion\\loginsheet.xlsx");
+
+        FileInputStream file = new FileInputStream("C:\\Users\\imam.hussain\\IdeaProjects\\newporjects\\Ascendion\\src\\main\\java\\org\\example\\Datadriven_Framework\\testdata\\loginsheet.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook(file);
         XSSFSheet sheet = workbook.getSheet("credentials");
         int noofrows = sheet.getPhysicalNumberOfRows();
         System.out.println(noofrows);
 
+        String Url = sheet.getRow(0).getCell(0).getStringCellValue();
+        Baseclass bc = new Baseclass();
+        bc.setup(Url);
         for (int i = 0; i < noofrows; i++) {
 
-            String testUrl = sheet.getRow(i).getCell(0).getStringCellValue();
             String Username = sheet.getRow(i).getCell(1).getStringCellValue();
             String Password = sheet.getRow(i).getCell(2).getStringCellValue();
 
@@ -39,7 +43,8 @@ public class login_ExtentReport {
             WebDriverManager.edgedriver().setup();
             WebDriver driver = new EdgeDriver();
             LOGIN_POM obj = new LOGIN_POM(driver);
-            driver.get(testUrl);
+            driver.get(Url);
+
             if (driver.getTitle().equals("Account Login")) {
                 test.pass("Title is matched");
             } else {
@@ -83,6 +88,8 @@ public class login_ExtentReport {
             extent.flush();
 
         }
+        bc.teardown();
+
 
     }
 }
