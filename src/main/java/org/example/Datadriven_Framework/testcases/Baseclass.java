@@ -12,14 +12,13 @@ public class Baseclass {
 
     public void setup(String url) throws IOException {
         Readconfig con = new Readconfig();
-        String BN = con.getproperties();
+        String BN = con.getbrowser();
 
         switch (BN) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 driver = new ChromeDriver();
                 driver.get(url);
-
         }
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
@@ -28,5 +27,4 @@ public class Baseclass {
     public void teardown() throws IOException {
         driver.quit();
     }
-
 }

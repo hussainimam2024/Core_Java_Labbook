@@ -1,6 +1,5 @@
-package org.example.Datadriven_Framework;
+package org.example.keyword_driven;
 
-import org.example.Datadriven_Framework.testcases.login_ExtentReport;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 
@@ -63,7 +62,7 @@ public class Keyword_Driven {
     }
 
     private static void login() throws IOException, InterruptedException {
-        login_ExtentReport loginReport = new login_ExtentReport();
+        login_extentReports loginReport = new login_extentReports();
         loginReport.main(null);
     }
 
