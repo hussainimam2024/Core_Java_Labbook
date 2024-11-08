@@ -81,6 +81,23 @@
             <version>7.10.2</version>
             <scope>compile</scope>
         </dependency>
+
+
+
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.5.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>5.0.9</version> <!-- Replace with the latest version if needed -->
+        </dependency>
+
     </dependencies>
+
 
 </project>

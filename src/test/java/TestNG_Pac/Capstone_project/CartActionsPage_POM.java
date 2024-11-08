@@ -14,8 +14,6 @@ import java.time.Duration;
 
 public class CartActionsPage_POM {
     WebDriver driver;
-
-    // Initialize elements
     public CartActionsPage_POM(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -25,67 +23,54 @@ public class CartActionsPage_POM {
     WebElement productImage;
 
     @FindBy(xpath = "//*[@id='AddToCartText-8017757602030']")
-    WebElement addToCartButton;
+    WebElement add_Button;
 
     @FindBy(id = "HeaderCartTrigger")
-    WebElement cartButton;
+    WebElement cart_btn;
 
-    @FindBy(id = "minusqty") // Assuming this is the decrement button
+    @FindBy(id = "minusqty")
     WebElement removeButton;
 
-    @FindBy(xpath = "/html/body/div[2]/main/div/div[3]/header/div/p[1]")
+    @FindBy(xpath = "//div[@class='rte text-spacing']/p[1]")
     WebElement emptyCartMessage;
 
     @FindBy(xpath = "//*[contains(@class, 'header-top_wrapper')]")
     WebElement headerTopWrapper;
 
-    // Click on product image to go to the product details page
-    public void clickOnProduct() {
+    public void click_Product() {
         productImage.click();
     }
-
-    // Method to scroll and add to cart
-    public void scrollAndAddToCart() {
+    public void Add_Cart() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));  // Wait for button to be clickable
+        wait.until(ExpectedConditions.elementToBeClickable(add_Button));  // Wait for button to be clickable
 
-        // Scrolling and adding to cart
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollBy(0, 400);");  // Scroll down to ensure the button is visible
 
-        wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));  // Wait for button again to be sure it's clickable
-        js.executeScript("arguments[0].click();", addToCartButton);  // Click the add to cart button via JS
-        System.out.println("Product has been added to the cart.");
+        wait.until(ExpectedConditions.elementToBeClickable(add_Button));  // Wait for button again to be sure it's clickable
+        js.executeScript("arguments[0].click();", add_Button);  // Click the add to cart button via JS
+        System.out.println("Product added in cart.");
     }
-
-
-    // Open the cart page
     public void openCart() {
-        cartButton.click();
+        cart_btn.click();
     }
-
-    // Remove the product from the cart
     public void removeProductFromCart() {
         removeButton.click();
+        System.out.println("Oops, your cart is feeling a bit light. Time to give it some love and add some goodies!");
     }
-
-    // Verify the empty cart message
     public void verifyEmptyCartMessage() {
         String expectedMessage = "Oops, your cart is feeling a bit light. Time to give it some love and add some goodies!";
         String actualMessage = emptyCartMessage.getText();
         Assert.assertEquals(actualMessage, expectedMessage, "The empty cart message does not match!");
         System.out.println("Verified: " + actualMessage);
     }
-
-    // Method to dismiss popup if present
     public void dismissPopupIfPresent() {
         try {
             if (headerTopWrapper.isDisplayed()) {
-                headerTopWrapper.click();  // Or handle close if there's a close button
+                headerTopWrapper.click();
                 System.out.println("Popup dismissed.");
             }
         } catch (Exception e) {
-            // Handle the case when the element is not present or not displayed
             System.out.println("No popup found.");
         }
     }
