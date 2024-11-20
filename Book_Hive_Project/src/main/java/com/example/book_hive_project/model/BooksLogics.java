@@ -14,6 +14,16 @@ public class BooksLogics {
     private String category;
     private String publisher;
     private String publishedYear;
+    private int price;
+
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
     public int getId() {
         return id;

@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS bookstore (
     category VARCHAR(255),
     published_year VARCHAR(255),
     publisher VARCHAR(255),
+    price int;
     PRIMARY KEY (id)
     );
