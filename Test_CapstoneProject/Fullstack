@@ -1,0 +1,688 @@
+package com.example.book_hive_project.controller;
+
+import com.example.book_hive_project.model.BooksLogics;
+import com.example.book_hive_project.service.BookService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.util.ReflectionUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+
+
+
+
+
+@RestController
+@RequestMapping("/books")
+public class BookController {
+
+    @Autowired
+    private BookService bookService;
+
+    // POST: Add a new book
+    @PostMapping
+    public ResponseEntity<BooksLogics> createBook(@RequestBody BooksLogics book) {
+        return ResponseEntity.ok(bookService.addBook(book));
+    }
+
+    // GET: Retrieve all books
+    @GetMapping
+    public ResponseEntity<List<BooksLogics>> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
+    }
+    @GetMapping("csrf-token")
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute("_csrf");
+    }
+
+    // HTTP methods for ID
+    @GetMapping("/{id}")
+    public ResponseEntity<BooksLogics> getBookById(@PathVariable int id) {
+        return bookService.getBookById(id) != null ?
+                ResponseEntity.ok(bookService.getBookById(id)) :
+                ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BooksLogics> updateBookById(@PathVariable int id, @RequestBody BooksLogics updatedBook) {
+        return bookService.updateBookById(id, updatedBook) ?
+                ResponseEntity.ok(updatedBook) :
+                ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<BooksLogics> patchBookById(@PathVariable int id, @RequestBody Map<String, Object> updates) {
+        BooksLogics book = bookService.partialUpdateBookById(id, updates);
+        return book != null ? ResponseEntity.ok(book) : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteBookById(@PathVariable int id) {
+        return bookService.deleteBookById(id) ?
+                ResponseEntity.ok("Book deleted successfully") :
+                ResponseEntity.badRequest().body("Book not found");
+    }
+    @GetMapping("/name/{bookName}")
+    public ResponseEntity<List<BooksLogics>> getBooksByName(@PathVariable String bookName) {
+        return ResponseEntity.ok(bookService.getBooksByName(bookName));
+    }
+
+    @DeleteMapping("/name/{bookName}")
+    public ResponseEntity<String> deleteBooksByName(@PathVariable String bookName) {
+        return bookService.deleteBooksByName(bookName) ?
+                ResponseEntity.ok("Books with name '" + bookName + "' deleted successfully.") :
+                ResponseEntity.badRequest().body("No books found with name '" + bookName + "'");
+    }
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<BooksLogics>> getBooksByCategory(@PathVariable String category) {
+        return ResponseEntity.ok(bookService.getBooksByCategory(category));
+    }
+    @DeleteMapping("/category/{category}")
+    public ResponseEntity<String> deleteBooksByCategory(@PathVariable String category) {
+        return bookService.deleteBooksByCategory(category) ?
+                ResponseEntity.ok("Books in category '" + category + "' deleted successfully.") :
+                ResponseEntity.badRequest().body("No books found in category '" + category + "'");
+    }
+
+}
+
+package com.example.book_hive_project.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HelloController {
+
+    @GetMapping("/")
+    public String greet() {
+        return "<html>" +
+                "<head>" +
+                "<title>Welcome to Book Hive</title>" +
+                "<style>" +
+                "body {font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; text-align: center; padding: 50px;}" +
+                "h1 {color: #5a9bff;}" +
+                ".container {max-width: 800px; margin: 30px auto; background-color: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}" +
+                "button {padding: 12px 24px; background-color: #5a9bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 10px;}" +
+                "button:hover {background-color: #1a73e8;}" +
+                "input[type='text'], input[type='number'] {padding: 12px; width: 100%; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc;}" +
+                "input[type='text'], input[type='number'] {margin-bottom: 20px;}" +
+                ".navbar {background-color: #007bff; overflow: hidden; padding: 15px 0;}" +
+                ".navbar a {float: left; display: block; color: white; padding: 14px 20px; text-align: center; text-decoration: none;}" +
+                ".navbar a:hover {background-color: #ddd; color: black;}" +
+                ".dropdown {float: left; overflow: hidden;}" +
+                ".dropdown .dropbtn {font-size: 16px; border: none; outline: none; color: white; padding: 14px 16px; background-color: #007bff; cursor: pointer;}" +
+                ".dropdown:hover .dropbtn {background-color: #ddd; color: black;}" +
+                ".dropdown-content {display: none; position: absolute; background-color: #007bff; min-width: 160px; z-index: 1;}" +
+                ".dropdown-content a {color: white; padding: 12px 16px; text-decoration: none; display: block;}" +
+                ".dropdown-content a:hover {background-color: #ddd; color: black;}" +
+                ".dropdown:hover .dropdown-content {display: block;}" +
+                "table {width: 100%; border-collapse: collapse; margin-top: 20px;}" +
+                "table, th, td {border: 1px solid #ccc;}" +
+                "th, td {padding: 12px; text-align: left;}" +
+                ".footer {background-color: #007bff; color: white; text-align: center; padding: 20px 0; margin-top: 20px;}" +
+
+                "</style>" +
+                "</head>" +
+                "<body>" +
+                "<div class='navbar'>" +
+                "<a href='#'>BookCart</a>" +
+                "<a href='#'>About</a>" +
+                "<a href='#'>Contact</a>" +
+                "<div class='dropdown'>" +
+                "<button class='dropbtn'>Order</button>" +
+                "<div class='dropdown-content'>" +
+                "<a href='#'>Books</a>" +
+                "<a href='#'>Cart</a>" +
+                "<a href='#'>Checkout</a>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "<div class='container'>" +
+                "<h1>Welcome to Book Hive</h1>" +
+                "<p>Your one-stop destination for books!</p>" +
+                "<button onclick=\"window.location.href='http://localhost:8888/books'\">Get All Books</button>" +
+                "<hr>" +
+                "<h2>Manage Books</h2>" +
+
+                "<form id='bookForm'>" +
+                "<input type='text' id='bookName' placeholder='Enter book name' />" +
+                "<input type='text' id='authorName' placeholder='Enter author name' />" +
+                "<input type='text' id='category' placeholder='Enter book category' />" +
+                "<input type='text' id='publisher' placeholder='Enter book publisher' />" +
+                "<input type='number' id='bookPrice' placeholder='Enter book price' />" +
+                "<input type='number' id='bookId' placeholder='Enter book ID' />" +
+                "<input type='text' id='publishedYear' placeholder='Enter published year' />" +
+                "</form>" +
+
+                "<button onclick=\"sendRequest('GET')\">GET Book</button>" +
+                "<button onclick=\"sendRequest('POST')\">POST Book</button>" +
+                "<button onclick=\"sendRequest('PUT')\">PUT Book</button>" +
+                "<button onclick=\"sendRequest('PATCH')\">PATCH Book</button>" +
+                "<button onclick=\"sendRequest('DELETE')\">DELETE Book</button>" +
+
+                "<h3>Books List</h3>" +
+                "<table id='booksTable'>" +
+                "<thead><tr><th>ID</th><th>Book Name</th><th>Author</th><th>Category</th><th>Publisher</th><th>Price</th><th>Published Year</th></tr></thead>" +
+                "<tbody></tbody>" +
+                "</table>" +
+                "</div>" +
+
+                "<div class='footer'>" +
+                "<p>&copy; TeamB 2024</p>" +
+                "</div>" +
+
+                "<script>" +
+                "function sendRequest(method) {" +
+                "    var bookId = document.getElementById('bookId').value;" +
+                "    var bookName = document.getElementById('bookName').value;" +
+                "    var authorName = document.getElementById('authorName').value;" +
+                "    var category = document.getElementById('category').value;" +
+                "    var publisher = document.getElementById('publisher').value;" +
+                "    var publishedYear = document.getElementById('publishedYear').value;" +
+                "    var bookPrice = document.getElementById('bookPrice').value;" +
+                "    var url = 'http://localhost:8888/books';" +
+
+                "    var xhr = new XMLHttpRequest();" +
+                "    xhr.open(method, url, true);" +
+
+                "    xhr.setRequestHeader('Content-Type', 'application/json');" +
+
+                "    xhr.onload = function() {" +
+                "        if (xhr.status >= 200 && xhr.status < 300) {" +
+                "            var response = JSON.parse(xhr.responseText);" +
+                "            updateTable(response);" +
+                "        } else {" +
+                "            alert('Error: ' + xhr.statusText);" +
+                "        }" +
+                "    };" +
+
+                "    var data = {};" +
+                "    if (bookId) data.id = bookId;" +
+                "    if (bookName) data.bookName = bookName;" +
+                "    if (authorName) data.authorName = authorName;" +
+                "    if (category) data.category = category;" +
+                "    if (publisher) data.publisher = publisher;" +
+                "    if (publishedYear) data.publishedYear = publishedYear;" +
+                "    if (bookPrice) data.bookPrice = bookPrice;" +
+
+                "    xhr.send(JSON.stringify(data));" +
+                "}" +
+
+                "function updateTable(books) {" +
+                "    var tableBody = document.getElementById('booksTable').getElementsByTagName('tbody')[0];" +
+                "    tableBody.innerHTML = '';" +
+
+                "    books.forEach(function(book) {" +
+                "        var row = tableBody.insertRow();" +
+                "        row.insertCell(0).textContent = book.id;" +
+                "        row.insertCell(1).textContent = book.bookName;" +
+                "        row.insertCell(2).textContent = book.authorName;" +
+                "        row.insertCell(3).textContent = book.category;" +
+                "        row.insertCell(4).textContent = book.publisher;" +
+                "        row.insertCell(5).textContent = book.bookPrice;" +
+                "        row.insertCell(6).textContent = book.publishedYear;" +
+                "    });" +
+                "}" +
+                "</script>" +
+                "</body>" +
+                "</html>";
+    }
+}
+
+package com.example.book_hive_project.model;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Bookstore")
+public class BooksLogics {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String bookName;
+    private String authorName;
+    private String category;
+    private String publisher;
+    private String publishedYear;
+    private int price;
+
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getBookName() {
+        return bookName;
+    }
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
+    }
+    public String getAuthorName() {
+        return authorName;
+    }
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {
+        this.category = category;
+    }
+    public String getPublisher() {
+        return publisher;
+    }
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+    public String getPublishedYear() {
+        return publishedYear;
+    }
+    public void setPublishedYear(String publishedYear) {
+        this.publishedYear = publishedYear;
+    }
+}
+/*
+one url for post ,get, put, patch, delete
+http://localhost:8080/books
+ */
+
+ package com.example.book_hive_project.repo;
+
+ import com.example.book_hive_project.model.BooksLogics;
+ import org.springframework.data.jpa.repository.JpaRepository;
+
+ import java.util.List;
+
+ public interface BookRepo extends JpaRepository<BooksLogics, Integer> {
+
+     List<BooksLogics> findByBookNameContainingIgnoreCase(String bookName);
+     List<BooksLogics> findByCategoryContainingIgnoreCase(String category);
+
+
+ }
+
+
+package com.example.book_hive_project.service;
+
+import com.example.book_hive_project.model.BooksLogics;
+import com.example.book_hive_project.repo.BookRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class BookService {
+
+    @Autowired
+    private BookRepo bookRepo;
+
+    public BooksLogics addBook(BooksLogics book) {
+        return bookRepo.save(book);
+    }
+
+    public List<BooksLogics> getAllBooks() {
+        return bookRepo.findAll();
+    }
+
+    public BooksLogics getBookById(int id) {
+        return bookRepo.findById(id).orElse(null);
+    }
+
+    public boolean updateBookById(int id, BooksLogics updatedBook) {
+        if (bookRepo.existsById(id)) {
+            updatedBook.setId(id);
+            bookRepo.save(updatedBook);
+            return true;
+        }
+        return false;
+    }
+
+    public BooksLogics partialUpdateBookById(int id, Map<String, Object> updates) {
+        BooksLogics book = getBookById(id);
+        if (book != null) {
+            updates.forEach((key, value) -> {
+                Field field = ReflectionUtils.findField(BooksLogics.class, key);
+                if (field != null) {
+                    field.setAccessible(true);
+                    ReflectionUtils.setField(field, book, value);
+                }
+            });
+            return bookRepo.save(book);
+        }
+        return null;
+    }
+
+    public boolean deleteBookById(int id) {
+        if (bookRepo.existsById(id)) {
+            bookRepo.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    public List<BooksLogics> getBooksByName(String bookName) {
+        return bookRepo.findByBookNameContainingIgnoreCase(bookName);
+    }
+
+    public boolean deleteBooksByName(String bookName) {
+        List<BooksLogics> books = bookRepo.findByBookNameContainingIgnoreCase(bookName);
+        if (!books.isEmpty()) {
+            bookRepo.deleteAll(books);
+            return true;
+        }
+        return false;
+    }
+
+    public List<BooksLogics> getBooksByCategory(String category) {
+        return bookRepo.findByCategoryContainingIgnoreCase(category);
+    }
+
+    public boolean deleteBooksByCategory(String category) {
+        List<BooksLogics> books = bookRepo.findByCategoryContainingIgnoreCase(category);
+        if (!books.isEmpty()) {
+            bookRepo.deleteAll(books);
+            return true;
+        }
+        return false;
+    }
+}
+
+
+
+# Application Name
+spring.application.name=Book_Hive_Project
+
+# DataSource Configuration
+spring.datasource.url=jdbc:postgresql://localhost:5432/Bookstore
+spring.datasource.username=postgres
+spring.datasource.password=Mysql@78621
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# Hibernate Configuration
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+
+# Server Configuration
+server.address=0.0.0.0
+server.port=8888
+
+# View Resolver Configuration for JSP
+# View Resolver Configuration for JSP
+spring.mvc.view.prefix=/
+spring.mvc.view.suffix=.jsp
+
+
+spring.security.user.name=admin
+spring.security.user.password=admin12345
+
+# Allow login/logout URLs to be accessed without authentication
+spring.thymeleaf.prefix=classpath:/webapp/
+spring.thymeleaf.suffix=.html
+
+
+
+CREATE TABLE IF NOT EXISTS bookstore (
+                                         id SERIAL PRIMARY KEY,                      -- Using SERIAL for auto-increment in PostgreSQL
+                                         author_name VARCHAR(255),
+    book_name VARCHAR(255),
+    category VARCHAR(255),
+    published_year VARCHAR(255),
+    publisher VARCHAR(255),
+    price INT
+    );
+
+pom.xml
+
+<dependencies>
+        <!-- Spring Boot Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- PostgreSQL Driver -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- JSON Web Token (JWT) -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- JSP Dependencies -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+
+        <!-- Testing and Automation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.3.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>7.20.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>7.20.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.10.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+
+        <!-- JSON Parsing -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+
+        <!-- Apache POI for Excel -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+
+        <!-- Log4j -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>3.0.0-beta2</version>
+        </dependency>
+
+        <!-- WebDriver Manager -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.9.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>7.20.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-testng</artifactId>
+            <version>7.20.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.10.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>5.0.9</version> <!-- Replace with the latest version if needed -->
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.26.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.10.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>3.0.0-beta2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.10.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.5.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+
+
+
+
+    </dependencies>
