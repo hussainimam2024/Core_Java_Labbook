@@ -1,3 +1,4 @@
+
 package com.example.capstone_project_orangehrm.POM;
 
 import org.openqa.selenium.By;
@@ -10,8 +11,6 @@ import java.time.Duration;
 
 public class LoginPage {
     private WebDriver driver;
-
-    // Define the elements using the provided XPath locators
     private By usernameField = By.xpath("/html/body/div/div[1]/div/div[1]/div/div[2]/div[2]/form/div[1]/div/div[2]/input");
     private By passwordField = By.xpath("/html/body/div/div[1]/div/div[1]/div/div[2]/div[2]/form/div[2]/div/div[2]/input");
     private By loginButton = By.xpath("/html/body/div/div[1]/div/div[1]/div/div[2]/div[2]/form/div[3]/button");
@@ -82,9 +81,23 @@ public class LoginPage {
 
     public String getResetPasswordVerifyText() {
         WebElement verifyTextElement = waitForElementToBeVisible(resetPasswordVerifyText);
-        waitFor(2000);  // Wait for 2 seconds
-        return verifyTextElement.getText();  // Returns the text to verify the reset process
+        waitFor(2000);
+        return verifyTextElement.getText();
     }
+    private By password_errorMessage = By.xpath("/html/body/div/div[1]/div/div[1]/div/div[2]/div[2]/form/div[2]/div/span");  // Replace with correct XPath if necessary
+    public String getErrorMessage() {
+        WebElement errorElement = waitForElementToBeVisible(password_errorMessage);
+        return errorElement.getText();
+    }
+
+    private By invaliderrorMessage = By.xpath("/html/body/div/div[1]/div/div[1]/div/div[2]/div[2]/div[1]/div[1]/div[1]/p");  // Your provided XPath
+    public String getErrorMessageinvalidlogin() {
+        WebElement errorElement = waitForElementToBeVisible(invaliderrorMessage);
+        return errorElement.getText();  // Get the text content of the error message
+    }
+
+
+
 
     // Method to add a custom wait for the specified time in milliseconds
     private void waitFor(long milliseconds) {
